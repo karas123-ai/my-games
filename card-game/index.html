@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>games</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f4f4f4;
+      text-align: center;
+      padding: 20px;
+      direction: rtl;
+    }
+    h1 {
+      color: #333;
+    }
+    .game {
+      background: white;
+      border: 2px solid #ccc;
+      border-radius: 15px;
+      padding: 15px;
+      margin: 20px auto;
+      max-width: 400px;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+    }
+    button {
+      padding: 10px;
+      margin: 5px;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      background-color: #3498db;
+      color: white;
+    }
+    .board button {
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <h1>مرحبا بك في موقع الألعاب</h1>
+
+  <!-- لعبة XO -->
+  <div class="game">
+    <h2>لعبة XO</h2>
+    <div class="board" id="xo-board">
+      <button onclick="xoMove(0)"></button>
+      <button onclick="xoMove(1)"></button>
+      <button onclick="xoMove(2)"></button><br>
+      <button onclick="xoMove(3)"></button>
+      <button onclick="xoMove(4)"></button>
+      <button onclick="xoMove(5)"></button><br>
+      <button onclick="xoMove(6)"></button>
+      <button onclick="xoMove(7)"></button>
+      <button onclick="xoMove(8)"></button>
+    </div>
+    <p id="xo-status"></p>
+    <button onclick="resetXO()">إعادة</button>
+  </div>
+
+  <!-- لعبة التخمين -->
+  <div class="game">
+    <h2>لعبة التخمين</h2>
+    <p>اخمن رقم من 1 إلى 10</p>
+    <input type="number" id="guess" />
+    <button onclick="checkGuess()">تحقق</button>
+    <p id="guess-result"></p>
+  </div>
+
+  <!-- لعبة جمع النقاط -->
+  <div class="game">
+    <h2>لعبة جمع النقاط</h2>
+    <p>نقاطك: <span id="score">0</span></p>
+    <button onclick="addScore()">اجمع</button>
+  </div>
+
+  <!-- لعبة Click Counter -->
+  <div class="game">
+    <h2>عداد الضغطات</h2>
+    <p>عدد الضغطات: <span id="clicks">0</span></p>
+    <button onclick="countClick()">اضغط</button>
+  </div>
+
+  <!-- لعبة تغيير اللون -->
+  <div class="game">
+    <h2>لون عشوائي</h2>
+    <p>اضغط لتغيير لون الخلفية</p>
+    <button onclick="changeColor()">غير اللون</button>
+  </div>
+
+  <script>
+    // XO
+    let xoCurrent = "X";
+    let xoBoard = ["", "", "", "", "", "", "", "", ""];
+
+    function xoMove(index) {
+      const buttons = document.querySelectorAll("#xo-board button");
+      if (xoBoard[index] === "") {
+        xoBoard[index] = xoCurrent;
+        buttons[index].textContent = xoCurrent;
+        xoCurrent = xoCurrent === "X" ? "O" : "X";
+        checkXO();
+      }
+    }
+
+    function checkXO() {
+      const winComb = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+      ];
+      for (const comb of winComb) {
+        const [a,b,c] = comb;
+        if (xoBoard[a] && xoBoard[a] === xoBoard[b] && xoBoard[b] === xoBoard[c]) {
+          document.getElementById("xo-status").textContent = `الفائز هو ${xoBoard[a]}!`;
+          return;
+        }
+      }
+    }
+
+    function resetXO() {
+      xoBoard = ["", "", "", "", "", "", "", "", ""];
+      const buttons = document.querySelectorAll("#xo-board button");
+      buttons.forEach(btn => btn.textContent = "");
+      xoCurrent = "X";
+      document.getElementById("xo-status").textContent = "";
+    }
+
+    // التخمين
+    const randomNum = Math.floor(Math.random() * 10) + 1;
+    function checkGuess() {
+      const val = parseInt(document.getElementById("guess").value);
+      if (val === randomNum) {
+        document.getElementById("guess-result").textContent = "صح!";
+      } else {
+        document.getElementById("guess-result").textContent = "غلط، حاول تاني";
+      }
+    }
+
+    // جمع النقاط
+    let score = 0;
+    function addScore() {
+      score++;
+      document.getElementById("score").textContent = score;
+    }
+
+    // Click Counter
+    let clicks = 0;
+    function countClick() {
+      clicks++;
+      document.getElementById("clicks").textContent = clicks;
+    }
+
+    // تغيير لون
+    function changeColor() {
+      const colors = ["#ff4444", "#44ff44", "#4444ff", "#ffff44", "#ff44ff"];
+      document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    }
+  </script>
+</body>
+</html>
