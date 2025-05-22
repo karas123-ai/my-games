@@ -159,5 +159,22 @@
       document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
     }
   </script>
+  <h2>اسأل سؤال عن الموقع</h2>
+<input type="text" id="question" placeholder="اكتب سؤالك هنا">
+<button onclick="answer()">اسأل</button>
+<p id="response"></p>
+
+<script>
+  function answer() {
+    var q = document.getElementById("question").value.toLowerCase();
+    var response = document.getElementById("response");
+
+    if (q.includes("مين") && (q.includes("صاحب") || q.includes("عمل") || q.includes("اللي عمل"))) {
+      response.innerText = "صاحب الموقع هو المبرمج Karas Ezzat";
+    } else {
+      response.innerText = "معرفش إجابة السؤال ده.";
+    }
+  }
+</script>
 </body>
 </html>
